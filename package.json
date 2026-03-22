@@ -1,0 +1,42 @@
+{
+  "name": "bdd-playwright-framework",
+  "version": "3.0.0",
+  "description": "FAANG-style Playwright + TypeScript + Cucumber BDD framework for Salesforce with AI self-healing, locator memory, MCP starter, dashboard reporting, and session reuse.",
+  "private": true,
+  "scripts": {
+    "clean": "rimraf dist reports/dashboard/* reports/json/* reports/screenshots/* test-results || exit 0",
+    "build": "tsc -p tsconfig.json",
+    "pretest": "npm run clean",
+    "test": "cucumber-js --config cucumber.js",
+    "test:regression": "cucumber-js --config cucumber.js --tags \"@regression\"",
+    "test:login": "cucumber-js --config cucumber.js --tags \"@login\"",
+    "test:headed": "cross-env HEADLESS=false cucumber-js --config cucumber.js",
+    "test:chrome": "cross-env BROWSER=chrome cucumber-js --config cucumber.js",
+    "test:login:fresh": "npm run auth:clear && cucumber-js --config cucumber.js --tags \"@login\"",
+    "report:dashboard": "ts-node scripts/generate-dashboard-report.ts",
+    "report:open:mac": "open reports/dashboard/index.html",
+    "report:open:win": "start reports\\dashboard\\index.html",
+    "auth:setup": "ts-node scripts/auth.setup.ts",
+    "auth:clear": "node scripts/auth.clear.js",
+    "mcp:start": "node mcp-server.js",
+    "mcp:test": "curl http://localhost:3001/health",
+    "pw:install": "playwright install chrome chromium",
+    "pw:install:deps": "playwright install-deps",
+    "lint:types": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^11.2.0",
+    "@playwright/test": "^1.52.0",
+    "axios": "^1.8.4",
+    "dotenv": "^16.5.0",
+    "multiple-cucumber-html-reporter": "^3.8.0",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.15",
+    "cross-env": "^7.0.3",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
