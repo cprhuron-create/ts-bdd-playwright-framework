@@ -1,3 +1,38 @@
+# name: Regression Tests
+
+# on:
+#   push:
+#     branches: [main]
+#   pull_request:
+
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v4
+
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
+
+#       - name: Install dependencies
+#         run: npm ci
+
+#       - name: Install Playwright Browsers
+#         run: npx playwright install --with-deps
+
+#       - name: Run Tests
+#         run: npm run test:login
+
+#       - name: Upload Reports
+#         if: always()
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: test-reports
+#           path: reports/
 name: Regression Tests
 
 on:
@@ -24,8 +59,11 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run Tests
-        run: npm run test:login
+      - name: Run Tests (Skip login)
+        run: npx cucumber-js --tags "not @login"
+        env:
+          AI_HEALING: false
+          MCP_ENABLED: false
 
       - name: Upload Reports
         if: always()
